@@ -20,6 +20,33 @@ const initialState: ProductState = {
   products: [],
 };
 
+const calculateMilkDiscount = (product: ICartProduct) => {
+  let discount = Math.floor(product.quantity / 4) * product.price;
+  product.discount = product.quantity > 3 ? discount : 0;
+};
+
+const calculateBreadDiscount = (
+  product: ICartProduct,
+  products: ICartProduct[]
+) => {
+  let bread = products.find((prod) => prod.id === "bread");
+  if (!bread) {
+    return;
+  }
+  if (product.quantity < 2) {
+    bread.discount = 0;
+    return;
+  }
+  let discountTimes = Math.floor(product.quantity / 2);
+  let totalDiscountForBread = 0;
+  for (let i = 0; i < bread.quantity; i++) {
+    if (i < discountTimes) {
+      totalDiscountForBread += 0.5;
+    }
+  }
+  bread.discount = totalDiscountForBread;
+};
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -50,29 +77,13 @@ const productsSlice = createSlice({
       }
     },
     calculateDiscount: (state) => {
-      state.products.forEach((product) => {
+      state.products.forEach((product, index, products) => {
         switch (product.id) {
           case "milk":
-            let discount = Math.floor(product.quantity / 4) * product.price;
-            product.discount = product.quantity > 3 ? discount : 0;
+            calculateMilkDiscount(product);
             break;
           case "butter":
-            let bread = state.products.find((prod) => prod.id === "bread");
-            if (!bread) {
-              return;
-            }
-            if (product.quantity < 2) {
-              bread.discount = 0;
-              return;
-            }
-            let discountTimes = Math.floor(product.quantity / 2);
-            let totalDiscountForBread = 0;
-            for (let i = 0; i < bread.quantity; i++) {
-              if (i < discountTimes) {
-                totalDiscountForBread += 0.5;
-              }
-            }
-            bread.discount = totalDiscountForBread;
+            calculateBreadDiscount(product, products);
             break;
         }
       });
