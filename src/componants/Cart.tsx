@@ -10,7 +10,7 @@ function Cart(props: Props) {
 
   const getProductQuantity = (productId: string) => {
     const product = products.find((p) => p.id === productId);
-    return product ? product.quantity : 0;
+    return product ? product : 0;
   };
 
   let discounts = products.reduce((acc, curr) => acc + curr.discount, 0);
@@ -35,19 +35,32 @@ function Cart(props: Props) {
       ) : (
         <>
           {allProducts.map((product) => {
-            const quantity = getProductQuantity(product.id);
-            if (!quantity) return null;
+            const prod = getProductQuantity(product.id);
+            if (!prod) return null;
             return (
               <CartProductCard
                 key={product.id}
-                data={{ ...product, quantity }}
+                data={{
+                  ...product,
+                  quantity: prod.quantity,
+                  discount: prod.discount,
+                }}
               />
             );
           })}
 
-          <h5> discount : {discounts.toFixed(2)}</h5>
-          <h5> subtotal : {subtotal.toFixed(2)}</h5>
-          <h5> total : {(subtotal - discounts).toFixed(2)}</h5>
+          <div className="result">
+            <h4>discount </h4>
+            <p>£ {discounts.toFixed(2)}</p>
+          </div>
+          <div className="result">
+            <h4>subtotal </h4>
+            <p>£ {subtotal.toFixed(2)}</p>
+          </div>
+          <div className="result">
+            <h4>total</h4>
+            <p>£ {(subtotal - discounts).toFixed(2)}</p>
+          </div>
         </>
       )}
     </div>

@@ -8,6 +8,7 @@ import { IProduct } from "../features/ProductsSlice";
 
 interface cartProduct extends IProduct {
   quantity: number;
+  discount?: number;
 }
 
 type Props = {
@@ -16,14 +17,14 @@ type Props = {
 
 function CartProductCard({ data }: Props) {
   const dispatch = useAppDispatch();
-  const handlePlus = () => {
-    dispatch(addToCart({ price: data.price, productId: data.id }));
+
+  const handleChange = (type: number) => {
+    type === 1
+      ? dispatch(addToCart({ price: data.price, productId: data.id }))
+      : dispatch(removeFromCart(data.id));
     dispatch(calculateDiscount());
   };
-  const handleMinus = () => {
-    dispatch(removeFromCart(data.id));
-    dispatch(calculateDiscount());
-  };
+
   return (
     <div className="cartItem">
       <img
@@ -37,20 +38,25 @@ function CartProductCard({ data }: Props) {
           quantity :
           <button
             className="cartItem_btn"
-            onClick={handleMinus}
+            onClick={() => handleChange(-1)}
           >
             -
           </button>
           <b>{data.quantity}</b>
           <button
             className="cartItem_btn"
-            onClick={handlePlus}
+            onClick={() => handleChange(1)}
           >
             +
           </button>
         </div>
       </div>
-      <h3> {(data.price * data.quantity).toFixed(2)}</h3>
+      <div>
+        {data.discount ? (
+          <h3 className="discount">£ {data.discount.toFixed(2)}</h3>
+        ) : null}
+        <h3>£ {(data.price * data.quantity).toFixed(2)}</h3>
+      </div>
     </div>
   );
 }

@@ -91,4 +91,45 @@
 }
 .rating_star {
   width: 20px;
+}
+
+.discount {
+  color: red;
+  text-decoration: line-through;
+}
+
+.result {
+  text-align: right;
+  margin-bottom: 10px;
+}
+.result h4 {
+  color: #5b5b5b;
+  margin-bottom: 5px;
+}
+.result p {
+  font-weight: bold;
+}
+
+@media only screen and (max-width: 1200px) {
+  /*Tablets [601px -> 1200px]*/
+  .App {
+    flex-wrap: wrap;
+  }
+  .App .Products,
+.App .cart {
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .productCard_data {
+    flex-wrap: wrap;
+  }
+  .productCard_data_picture {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  .cartItem {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
 }/*# sourceMappingURL=main.css.map */
