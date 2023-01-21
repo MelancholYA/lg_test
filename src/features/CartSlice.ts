@@ -50,36 +50,32 @@ const productsSlice = createSlice({
       }
     },
     calculateDiscount: (state) => {
-      let newState = state.products.map((product, index, arr) => {
-        if (product.id === "milk") {
-          let diskount = Math.floor(product.quantity / 4) * product.price;
-          if (product.quantity > 3) {
-            product.discount = diskount;
-          } else if (product.quantity <= 3) {
-            product.discount = 0;
-          }
-        }
-        if (product.id === "butter") {
-          let bread = arr.find((prod) => prod.id === "bread");
-          if (!bread) {
-            return product;
-          }
-          if (product.quantity < 2) {
-            bread.discount = 0;
-            return product;
-          }
-          let discountTimes = Math.floor(product.quantity / 2);
-          let totalDiscountForBread = 0;
-          for (let i = 0; i < bread.quantity; i++) {
-            if (i < discountTimes) {
-              totalDiscountForBread += 0.5;
+      state.products.forEach((product) => {
+        switch (product.id) {
+          case "milk":
+            let discount = Math.floor(product.quantity / 4) * product.price;
+            product.discount = product.quantity > 3 ? discount : 0;
+            break;
+          case "butter":
+            let bread = state.products.find((prod) => prod.id === "bread");
+            if (!bread) {
+              return;
             }
-          }
-          bread.discount = totalDiscountForBread;
+            if (product.quantity < 2) {
+              bread.discount = 0;
+              return;
+            }
+            let discountTimes = Math.floor(product.quantity / 2);
+            let totalDiscountForBread = 0;
+            for (let i = 0; i < bread.quantity; i++) {
+              if (i < discountTimes) {
+                totalDiscountForBread += 0.5;
+              }
+            }
+            bread.discount = totalDiscountForBread;
+            break;
         }
-        return product;
       });
-      state.products = newState;
     },
   },
 });
