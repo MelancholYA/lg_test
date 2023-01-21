@@ -61,16 +61,21 @@ const productsSlice = createSlice({
         }
         if (product.id === "butter") {
           let bread = arr.find((prod) => prod.id === "bread");
-          if (product.quantity >= 2 && bread?.quantity) {
-            let discount =
-              Math.floor(product.quantity / 2) * (0.5 * bread.price);
-            if (discount > bread.quantity * bread.price) {
-              return product;
-            }
-            bread.discount = discount;
-          } else if (product.quantity < 2 && bread?.quantity) {
-            bread.discount = 0;
+          if (!bread) {
+            return product;
           }
+          if (product.quantity < 2) {
+            bread.discount = 0;
+            return product;
+          }
+          let discountTimes = Math.floor(product.quantity / 2);
+          let totalDiscountForBread = 0;
+          for (let i = 0; i < bread.quantity; i++) {
+            if (i < discountTimes) {
+              totalDiscountForBread += 0.5;
+            }
+          }
+          bread.discount = totalDiscountForBread;
         }
         return product;
       });

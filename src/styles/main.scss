@@ -105,7 +105,6 @@
 }
 
 @media only screen and (max-width: 1200px) {
-  /*Tablets [601px -> 1200px]*/
   .App {
     flex-wrap: wrap;
     .Products,
@@ -124,6 +123,11 @@
   }
   .cartItem {
     flex-wrap: wrap;
-    justify-content: flex-end;
+    &_picture {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 0;
+      margin-bottom: 15px;
+    }
   }
 }
